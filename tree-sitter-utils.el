@@ -11,18 +11,34 @@
 
 (require 'tree-sitter)
 
-(defvar tree-sitter-utils-function-querys-alist '(('ruby-mode . "[(method) (singleton_method)] @function"))
-  "A set of modes and associated querys that match too all functions in a buffer.")
+(defgroup tree-sitter-utils nil
+  "Tree sitter utility functions."
+  :group 'tree-sitter)
+
+(defcustom tree-sitter-utils-function-querys-alist '((ruby-mode ."[(method) (singleton_method)] @function"))
+  "A set of modes and associated querys that match too all functions in a buffer."
+  :group 'tree-sitter-utils
+  :type '(alist
+          :key-type symbol
+          :value-type string))
+
+
+(defun tree-sitter-utils-count-querys (query)
+  "Return the number of matched querys in a buffer.
+Takes a QUERY :: String as an argument.
+Returns a number"
+  (require 'tsc)
+  (let* ((root-node (tsc-root-node tree-sitter-tree))
+         (query (tsc-make-query tree-sitter-language query))
+         (captures (tsc-query-captures query root-node #'tsc--buffer-substring-no-properties)))
+    (length captures)))
 
 (defun tree-sitter-utils-count-functions ()
-  "Count all functions in a buffer."
+  "Count all the functions in a buffer."
   (interactive)
-  (require 'tsc)
-  (let* ((debugging-query (cdr (assoc major-mode tree-sitter-utils-function-querys-alist)))
-         (root-node (tsc-root-node tree-sitter-tree))
-         (query (tsc-make-query tree-sitter-language debugging-query))
-         (captures (tsc-query-captures query root-node #'tsc--buffer-substring-no-properties)))
-    (message "%s" (length captures))))
+  (message "there are %s functions in this buffer"
+           (tree-sitter-utils-count-querys
+             (alist-get major-mode tree-sitter-utils-function-querys-alist))))
 
 (provide 'tree-sitter-utils)
 ;;; tree-sitter-utils.el ends here
