@@ -1,0 +1,4 @@
+#+TITLE: Tree sitter utils
+
+This package adds a bunch of utility functions and command related to tree
+sitter that are useful but to small for there own packages.that are
