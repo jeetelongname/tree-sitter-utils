@@ -2,3 +2,14 @@
 
 This package adds a bunch of utility functions and command related to tree
 sitter that are useful but to small for there own packages.that are
+
+* Helper functions
+| function                      | description                                          |
+|-------------------------------+------------------------------------------------------|
+| tree-sitter-utils-count-query | return the number of matches to a query in a buffer. |
+|                               |                                                      |
+* Utility commands
+| command                           | description                                               |
+|-----------------------------------+-----------------------------------------------------------|
+| tree-sitter-utils-count-functions | message the user with the amount of functions in a buffer |
+|                                   |                                                           |
